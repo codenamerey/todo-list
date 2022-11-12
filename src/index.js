@@ -1,3 +1,4 @@
-const myName = "Jonathan";
+import 'normalize.css';
+import {UI} from './UI';
 
-console.log(`Why hello there ${myName}!`);
+document.addEventListener('DOMContentLoaded', UI.initHomePage);
