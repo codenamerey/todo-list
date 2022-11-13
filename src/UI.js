@@ -1,6 +1,9 @@
 import { getToday } from "./date";
-
+import PubSub from "./PubSub";
+import eventListeners from "./eventListeners";
+import { toDoList } from "./toDoList";
 const UI = (function() {
+    let projectsDiv;
     const body = document.body;
     const initHomePage = function() {
         setupPage();
@@ -27,8 +30,11 @@ const UI = (function() {
     const renderMenu = function() {
         let projects = [...arguments];
         const h2 = renderElement('h2', `Today is ${getToday()}`);
-        const aside = renderElement('aside');
-        const ul = renderElement('ul', 'My projects');
+        const aside = renderElement('aside', null);
+
+        const ul = renderElement('ul', 'My projects', 'projects');
+        projectsDiv = document.querySelector('#projects');
+        const btn = renderElement('button', 'Add Task +', 'add-project-button');
         //check for projects
         if(projects.length == 0) {
             ul.appendChild((renderElement('p', 'None so far.')));
@@ -39,8 +45,7 @@ const UI = (function() {
                 ul.appendChild(li);
             });
         }
-        aside.appendChild(h2);
-        aside.appendChild(ul);
+        aside.append(h2, ul, btn);
         return aside;
     }
 
@@ -57,10 +62,18 @@ const UI = (function() {
         if(className) elem.classList.add(className);
         return elem;
     }
+
+    const updateMenu = function() {
+        console.log('Hello love');
+    }
     // const renderMenu = function() {
     //     const aside = document.createElement('aside');
     //     const ul
     // }
+    PubSub.subscribe("newProject", updateMenu);
+    setTimeout(() => {
+        eventListeners.addEventListeners();
+    }, 100)
     return {initHomePage};
 })();
 
