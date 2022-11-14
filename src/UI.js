@@ -89,16 +89,21 @@ const UI = (function() {
         const buttonDiv = document.querySelector('main > #button-div');  
         taskDiv.innerHTML = '';
         tasks.forEach((task) => {
-            const p = renderElement('p', task.title, 'task-item');
+            const p = renderElement('p', task.getName(), 'task-item');
             taskDiv.appendChild(p);
         });
         //if there is add-task-button already, forget it!
         if((buttonDiv.childNodes).length) return;
         const button = renderElement('button', 'Add Task +', 'add-task-button');
+        eventListeners.addEventListeners(button);
         buttonDiv.appendChild(button);
     }
 
-    const displayTasks = function(project) {
+    const displayTasks = function(tasks) {
+        updateMain(tasks);
+    }
+
+    const displayProject = function(project) {
         updateMain(project.getTasks());
     }
     // const renderMenu = function() {
@@ -106,7 +111,8 @@ const UI = (function() {
     //     const ul
     // }
     PubSub.subscribe("newProject", updateMenu);
-    PubSub.subscribe("prjClick", displayTasks);
+    PubSub.subscribe("taskAdded", displayTasks);
+    PubSub.subscribe("prjClick", displayProject);
     return {initHomePage};
 })();
 
