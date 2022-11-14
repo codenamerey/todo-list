@@ -33,8 +33,8 @@ const UI = (function() {
         const aside = renderElement('aside', null);
 
         const ul = renderElement('ul', 'My projects', 'projects');
-        projectsDiv = document.querySelector('#projects');
-        const btn = renderElement('button', 'Add Task +', 'add-project-button');
+        const btn = renderElement('button', 'Add Project +', 'add-project-button');
+        eventListeners.addEventListeners(btn);
         //check for projects
         if(projects.length == 0) {
             ul.appendChild((renderElement('p', 'None so far.')));
@@ -50,7 +50,10 @@ const UI = (function() {
     }
 
     const renderMain = function() {
-        const main = renderElement('main', 'Please open a project', 'projects-task');
+        const main = renderElement('main');
+        const taskDiv = renderElement('div', 'Please open a project', 'task-div');
+        const buttonDiv = renderElement('div', null, 'button-div');
+        main.append(taskDiv, buttonDiv)
         return main;
     }
 
@@ -63,17 +66,47 @@ const UI = (function() {
         return elem;
     }
 
-    const updateMenu = function() {
-        console.log('Hello love');
+    const updateMenu = function(projects) {
+        const projectsDiv = document.querySelector('#projects');
+        projectsDiv.innerHTML = '';
+        let index = 0;
+        for (const value in projects) {
+            const li = renderElement('li', projects[value].getProjectName(), `project-${index}`, 'project-item');
+            li.setAttribute('data-index', index);
+            //If project is clicked, broadcast it.
+            let that = projects[value];
+            eventListeners.addEventListeners(li, projects[value]);
+            // li.addEventListener('click', function() {
+            //     PubSub.publish('prjClick', that);
+            // });
+            projectsDiv.appendChild(li);
+            index++;
+        }
+    }
+
+    const updateMain = function(tasks) {
+        const taskDiv = document.querySelector('main > #task-div');
+        const buttonDiv = document.querySelector('main > #button-div');  
+        taskDiv.innerHTML = '';
+        tasks.forEach((task) => {
+            const p = renderElement('p', task.title, 'task-item');
+            taskDiv.appendChild(p);
+        });
+        //if there is add-task-button already, forget it!
+        if((buttonDiv.childNodes).length) return;
+        const button = renderElement('button', 'Add Task +', 'add-task-button');
+        buttonDiv.appendChild(button);
+    }
+
+    const displayTasks = function(project) {
+        updateMain(project.getTasks());
     }
     // const renderMenu = function() {
     //     const aside = document.createElement('aside');
     //     const ul
     // }
     PubSub.subscribe("newProject", updateMenu);
-    setTimeout(() => {
-        eventListeners.addEventListeners();
-    }, 100)
+    PubSub.subscribe("prjClick", displayTasks);
     return {initHomePage};
 })();
 
