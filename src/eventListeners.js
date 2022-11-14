@@ -11,6 +11,10 @@ export default (function eventListeners() {
             button.addEventListener('click', broadcastPrjClick.bind(null, object));
             return;
         }
+
+        if(button.id == 'add-task-button') {
+            button.addEventListener('click', addTaskBtnClick);
+        }
         // switch(button.id) {
         //     case 'add-project-button':
         //         button.addEventListener('click', broadcastAddPrj);
@@ -27,6 +31,11 @@ export default (function eventListeners() {
 
     const broadcastPrjClick = function(project) {
         PubSub.publish("prjClick", project);
+    }
+
+    const addTaskBtnClick = function() {
+        let taskName = prompt("Task Name:");
+        PubSub.publish("AddTaskClick", taskName);
     }
 
     return {addEventListeners}
