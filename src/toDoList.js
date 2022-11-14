@@ -4,8 +4,7 @@ const toDoList = (function() {
     let projects = [];
 
     const addProject = function(name) {
-        console.log('I am in');
-        let project_temp = new project(name);
+        let project_temp = new project(name, new Date("2022-12-25"));
         projects.push(project_temp);
         PubSub.publish("newProject", projects);
     }
