@@ -1,4 +1,5 @@
 import PubSub from "./PubSub";
+import { toDoList } from "./toDoList";
 
 export default (function eventListeners() {
     function addEventListeners(button, object) {
@@ -35,7 +36,8 @@ export default (function eventListeners() {
 
     const addTaskBtnClick = function() {
         let taskName = prompt("Task Name:");
-        PubSub.publish("AddTaskClick", taskName);
+        const currentProject = toDoList.getCurrentProject();
+        currentProject.addTask(taskName);
     }
 
     return {addEventListeners}

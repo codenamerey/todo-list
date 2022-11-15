@@ -25,7 +25,5 @@ export default function projectFactory(name, due) {
         PubSub.publish('taskAdded', tasks);
     }
 
-    PubSub.subscribe("AddTaskClick", addTask);
-
-    return {getDueDate, getProjectName, getTasks};
+    return {getDueDate, getProjectName, getTasks, addTask};
 }
