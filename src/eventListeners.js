@@ -1,5 +1,6 @@
 import PubSub from "./PubSub";
 import { toDoList } from "./toDoList";
+import projectFactory from "./project";
 
 export default (function eventListeners() {
     function addEventListeners(button, object) {
@@ -10,6 +11,7 @@ export default (function eventListeners() {
 
         if((button.id).match(/project-/g)) {
             button.addEventListener('click', broadcastPrjClick.bind(null, object));
+            button.addEventListener('dblclick', editPrjName.bind(null, object));
             return;
         }
 
@@ -33,6 +35,12 @@ export default (function eventListeners() {
     const broadcastPrjClick = function(project) {
         PubSub.publish("prjClick", project);
     }
+
+    const editPrjName = function(project) {
+        const newName = prompt("New project name:");
+        project.editPrjName(newName);
+        PubSub.publish("prjEdit", project);
+    } 
 
     const addTaskBtnClick = function() {
         let taskName = prompt("Task Name:");
