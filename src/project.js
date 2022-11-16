@@ -25,5 +25,13 @@ export default function projectFactory(name, due) {
         PubSub.publish('taskAdded', tasks);
     }
 
-    return {getDueDate, getProjectName, getTasks, addTask};
+    const editPrjName = function(name) {
+        projectName = name;
+    }
+
+    return {projectName, getDueDate, getProjectName, getTasks, addTask, editPrjName};
 }
+
+// const proto = (function() {
+
+// })();
