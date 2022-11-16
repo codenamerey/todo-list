@@ -12,7 +12,7 @@ const UI = (function() {
 
     const setupPage = function() {
         const header = renderHeader(`Whatchu Doin'? --- Browser-Based To-Do List`);
-        const aside = renderMenu();
+        const aside = renderMenu(localStorage.getItem('projects'));
         const main = renderMain();
         // const footer = document.createElement('footer');
 
@@ -28,7 +28,8 @@ const UI = (function() {
     }
 
     const renderMenu = function() {
-        let projects = [...arguments];
+        console.log(localStorage.getItem('projects'));
+        let projects = JSON.parse([...arguments][0]);
         const h2 = renderElement('h2', `Today is ${getToday()}`);
         const aside = renderElement('aside', null);
 
@@ -36,14 +37,18 @@ const UI = (function() {
         const btn = renderElement('button', 'Add Project +', 'add-project-button');
         eventListeners.addEventListeners(btn);
         //check for projects
-        if(projects.length == 0) {
+        if(projects == null || projects.length == 0) {
             ul.appendChild((renderElement('p', 'None so far.')));
         }
         else {
             projects.forEach((item) => {
-                let li = renderElement('li', item, null, 'menu-item');
+                let li = renderElement('li', item.projectName, null, 'menu-item');
                 ul.appendChild(li);
-            });
+            })
+            // projects.forEach((item) => {
+            //     let li = renderElement('li', item, null, 'menu-item');
+            //     ul.appendChild(li);
+            // });
         }
         aside.append(h2, ul, btn);
         return aside;
@@ -70,8 +75,9 @@ const UI = (function() {
         const projectsDiv = document.querySelector('#projects');
         projectsDiv.innerHTML = '';
         let index = 0;
+        console.log(projects);
         for (const value in projects) {
-            const li = renderElement('li', projects[value].getProjectName(), `project-${index}`, 'project-item');
+            const li = renderElement('li', projects[value].projectName, `project-${index}`, 'project-item');
             li.setAttribute('data-index', index);
             //If project is clicked, broadcast it.
             let that = projects[value];
@@ -113,6 +119,7 @@ const UI = (function() {
     PubSub.subscribe("newProject", updateMenu);
     PubSub.subscribe("taskAdded", displayTasks);
     PubSub.subscribe("prjClick", displayProject);
+    PubSub.subscribe("prjEdit", updateMenu.bind(null, toDoList.getProjects()));
     return {initHomePage};
 })();
 
