@@ -2,6 +2,7 @@ import { getToday } from "./date";
 import PubSub from "./PubSub";
 import eventListeners from "./eventListeners";
 import { toDoList } from "./toDoList";
+
 const UI = (function() {
     let projectsDiv;
     const body = document.body;
@@ -12,7 +13,7 @@ const UI = (function() {
 
     const setupPage = function() {
         const header = renderHeader(`Whatchu Doin'? --- Browser-Based To-Do List`);
-        const aside = renderMenu(localStorage.getItem('projects'));
+        const aside = renderMenu(toDoList.getProjects());
         const main = renderMain();
         // const footer = document.createElement('footer');
 
@@ -28,8 +29,7 @@ const UI = (function() {
     }
 
     const renderMenu = function() {
-        console.log(localStorage.getItem('projects'));
-        let projects = JSON.parse([...arguments][0]);
+        let projects = [...arguments][0];
         const h2 = renderElement('h2', `Today is ${getToday()}`);
         const aside = renderElement('aside', null);
 
@@ -37,12 +37,15 @@ const UI = (function() {
         const btn = renderElement('button', 'Add Project +', 'add-project-button');
         eventListeners.addEventListeners(btn);
         //check for projects
-        if(projects == null || projects.length == 0) {
+        if(!(projects[0]) || projects.length == 0) {
+            projects.splice(0, 1);
             ul.appendChild((renderElement('p', 'None so far.')));
         }
         else {
-            projects.forEach((item) => {
-                let li = renderElement('li', item.projectName, null, 'menu-item');
+            projects.forEach((item, index) => {
+                let li = renderElement('li', item.getProjectName(), `project-${index}`, 'project-item');
+                //listen for clicks
+                eventListeners.addEventListeners(li, projects[item]);
                 ul.appendChild(li);
             })
             // projects.forEach((item) => {
@@ -77,10 +80,9 @@ const UI = (function() {
         let index = 0;
         console.log(projects);
         for (const value in projects) {
-            const li = renderElement('li', projects[value].projectName, `project-${index}`, 'project-item');
+            const li = renderElement('li', projects[value].getProjectName(), `project-${index}`, 'project-item');
             li.setAttribute('data-index', index);
             //If project is clicked, broadcast it.
-            let that = projects[value];
             eventListeners.addEventListeners(li, projects[value]);
             // li.addEventListener('click', function() {
             //     PubSub.publish('prjClick', that);
