@@ -49,6 +49,7 @@ const toDoList = (function() {
     //     });
     // }
     const updateLocalStorage = function(project) {
+        //change the project name edit first to projects array, then save it.
         project.projectName = project.getProjectName();
         localStorage.setItem('projects', JSON.stringify(projects));
     }
