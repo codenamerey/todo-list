@@ -48,9 +48,11 @@ const toDoList = (function() {
     //         PubSub.publish("newProject", projects);
     //     });
     // }
-    const updateLocalStorage = function() {
+    const updateLocalStorage = function(project) {
+        project.projectName = project.getProjectName();
         localStorage.setItem('projects', JSON.stringify(projects));
     }
+
 
     PubSub.subscribe("AddPrjClick", addProject);
     PubSub.subscribe("prjClick", setCurrentProject);

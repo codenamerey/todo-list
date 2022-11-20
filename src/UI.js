@@ -78,10 +78,11 @@ const UI = (function() {
         const projectsDiv = document.querySelector('#projects');
         projectsDiv.innerHTML = '';
         let index = 0;
-        console.log(projects);
         for (const value in projects) {
             const li = renderElement('li', projects[value].getProjectName(), `project-${index}`, 'project-item');
             li.setAttribute('data-index', index);
+            console.log(projects);
+            console.log(projects[value].getProjectName())
             //If project is clicked, broadcast it.
             eventListeners.addEventListeners(li, projects[value]);
             // li.addEventListener('click', function() {
