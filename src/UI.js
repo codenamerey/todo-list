@@ -37,7 +37,7 @@ const UI = (function() {
         const btn = renderElement('button', 'Add Project +', 'add-project-button');
         eventListeners.addEventListeners(btn);
         //check for projects
-        if(!(projects[0]) || projects.length == 0) {
+        if(!(projects[0])) {
             projects.splice(0, 1);
             ul.appendChild((renderElement('p', 'None so far.')));
         }
@@ -45,7 +45,7 @@ const UI = (function() {
             projects.forEach((item, index) => {
                 let li = renderElement('li', item.getProjectName(), `project-${index}`, 'project-item');
                 //listen for clicks
-                eventListeners.addEventListeners(li, projects[item]);
+                eventListeners.addEventListeners(li, item);
                 ul.appendChild(li);
             })
             // projects.forEach((item) => {

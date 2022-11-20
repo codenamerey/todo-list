@@ -15,5 +15,5 @@ export default function taskFactory(name, desc, due, prio) {
         return prio;
     }
 
-    return {getName, getDesc, getDue, getPrio};
+    return {name, desc, due, prio, getName, getDesc, getDue, getPrio};
 }

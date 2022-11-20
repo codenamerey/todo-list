@@ -4,7 +4,7 @@ import taskFactory from './task';
 
 export default function projectFactory(name, due) {
     let projectName = name;
-    let tasks = [{title: "Default Task", desc: "This is an example task", due:"Tomorrow", prio:0, getName: () => {return this.title;}}];
+    let tasks = [];
     const creationTime = format(new Date(), 'hh:mm, MM-dd-yyyy');
     let dueDate = format(due, 'LLLL dd, yyyy');
     const getDueDate = function() {
@@ -19,6 +19,12 @@ export default function projectFactory(name, due) {
         return tasks;
     }
 
+
+    const addInitialTask = function(name) {
+        let task = taskFactory(name, 'I HAVE NO IDEA', '2022-12-25', 0);
+        tasks.push(task);
+    }
+
     const addTask = function(name) {
         let task = taskFactory(name, 'I HAVE NO IDEA', '2022-12-25', 0);
         tasks.push(task);
@@ -29,9 +35,5 @@ export default function projectFactory(name, due) {
         projectName = name;
     }
 
-    return {projectName, getDueDate, getProjectName, getTasks, addTask, editPrjName};
+    return {projectName, dueDate, tasks, getDueDate, getProjectName, getTasks, addTask, editPrjName, addInitialTask};
 }
-
-// const proto = (function() {
-
-// })();

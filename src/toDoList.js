@@ -6,14 +6,20 @@ const toDoList = (function() {
     let current_project;
     const recallProjects = function() {
         savedProjects.forEach((savedProject) => {
-            addInitialProjects(savedProject.projectName);
+            addInitialProjects(savedProject.projectName, savedProject.tasks);
         });
     }
 
-    const addInitialProjects = function(name) {
+    const addInitialProjects = function(name, tasks) {
         let project_temp = project(name, new Date("2022-12-25"));
+        if(tasks) {
+            tasks.forEach((task) => {
+                project_temp.addInitialTask(task.name);
+            });
+            projects.push(project_temp);
+            return;
+        }
         projects.push(project_temp);
-        console.log(projects);
     }
 
     const addProject = function(name) { 
@@ -42,10 +48,14 @@ const toDoList = (function() {
     //         PubSub.publish("newProject", projects);
     //     });
     // }
+    const updateLocalStorage = function() {
+        localStorage.setItem('projects', JSON.stringify(projects));
+    }
 
     PubSub.subscribe("AddPrjClick", addProject);
     PubSub.subscribe("prjClick", setCurrentProject);
-    console.log(projects);
+    PubSub.subscribe("taskAdded", updateLocalStorage);
+    PubSub.subscribe("prjEdit", updateLocalStorage);
     if(savedProjects) recallProjects();
     return {getCurrentProject, getProjects}
 })();
