@@ -3,7 +3,7 @@ import { toDoList } from "./toDoList";
 import projectFactory from "./project";
 
 export default (function eventListeners() {
-    function addEventListeners(button, object) {
+    const addEventListeners = function(button, object) {
         if(button.id == 'add-project-button') {
             button.addEventListener('click', broadcastAddPrj);
             return;          
@@ -18,6 +18,11 @@ export default (function eventListeners() {
         if(button.id == 'add-task-button') {
             button.addEventListener('click', addTaskBtnClick);
         }
+
+        if(button.classList.contains('delete-button')) {
+            button.addEventListener('click', removeProject.bind(null, object));
+        }
+
         // switch(button.id) {
         //     case 'add-project-button':
         //         button.addEventListener('click', broadcastAddPrj);
@@ -27,6 +32,17 @@ export default (function eventListeners() {
         //         break;
         // }
     }
+
+    // const removeEventListener = function() {
+
+    // }
+
+
+    const removeProject = function(project) {
+        console.log(project);
+        toDoList.removeProject(project);
+    }
+    
     const broadcastAddPrj = function() {
         let projectName = prompt('Project Name: ');
         PubSub.publish("AddPrjClick", projectName);

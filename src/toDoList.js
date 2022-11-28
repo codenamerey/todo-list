@@ -29,6 +29,13 @@ const toDoList = (function() {
         PubSub.publish("newProject", projects);
     }
 
+    const removeProject = function(project) {
+        console.log(project);
+        const index = projects.indexOf(project);
+        projects.splice(index, 1);
+        PubSub.publish('projectRemove');
+    }
+
     const getCurrentProject = function() {
         return current_project;
     }
@@ -48,7 +55,11 @@ const toDoList = (function() {
     //         PubSub.publish("newProject", projects);
     //     });
     // }
-    const updateLocalStorage = function(project) {
+    const updateLocalStorageOnTaskAdd = function(project) {
+        localStorage.setItem('projects', JSON.stringify(projects));
+    }
+
+    const updateLocalStorageOnPrjEdit = function(project) {
         //change the project name edit first to projects array, then save it.
         project.projectName = project.getProjectName();
         localStorage.setItem('projects', JSON.stringify(projects));
@@ -57,10 +68,10 @@ const toDoList = (function() {
 
     PubSub.subscribe("AddPrjClick", addProject);
     PubSub.subscribe("prjClick", setCurrentProject);
-    PubSub.subscribe("taskAdded", updateLocalStorage);
-    PubSub.subscribe("prjEdit", updateLocalStorage);
+    PubSub.subscribe("taskAdded", updateLocalStorageOnTaskAdd);
+    PubSub.subscribe("prjEdit", updateLocalStorageOnPrjEdit);
     if(savedProjects) recallProjects();
-    return {getCurrentProject, getProjects}
+    return {getCurrentProject, getProjects, removeProject}
 })();
 
 export {toDoList}

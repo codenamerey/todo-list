@@ -44,9 +44,12 @@ const UI = (function() {
         else {
             projects.forEach((item, index) => {
                 let li = renderElement('li', item.getProjectName(), `project-${index}`, 'project-item');
+                const del = renderElement('span', 'X', null,'delete-button');
                 //listen for clicks
                 eventListeners.addEventListeners(li, item);
-                ul.appendChild(li);
+                //delete project on click
+                eventListeners.addEventListeners(del, item);
+                ul.append(li, del);
             })
             // projects.forEach((item) => {
             //     let li = renderElement('li', item, null, 'menu-item');
@@ -80,15 +83,18 @@ const UI = (function() {
         let index = 0;
         for (const value in projects) {
             const li = renderElement('li', projects[value].getProjectName(), `project-${index}`, 'project-item');
+            const del = renderElement('span', 'X', null, 'delete-button');
             li.setAttribute('data-index', index);
             console.log(projects);
             console.log(projects[value].getProjectName())
             //If project is clicked, broadcast it.
             eventListeners.addEventListeners(li, projects[value]);
+            //If delete button is clicked, delete a project
+            eventListeners.addEventListeners(del, projects[value]);
             // li.addEventListener('click', function() {
             //     PubSub.publish('prjClick', that);
             // });
-            projectsDiv.appendChild(li);
+            projectsDiv.append(li, del);
             index++;
         }
     }
@@ -99,6 +105,8 @@ const UI = (function() {
         taskDiv.innerHTML = '';
         tasks.forEach((task) => {
             const p = renderElement('p', task.getName(), 'task-item');
+            const del = renderElement('span', 'X', 'delete-button');
+            p.appendChild(del);
             taskDiv.appendChild(p);
         });
         //if there is add-task-button already, forget it!
@@ -122,6 +130,7 @@ const UI = (function() {
     PubSub.subscribe("newProject", updateMenu);
     PubSub.subscribe("taskAdded", displayTasks);
     PubSub.subscribe("prjClick", displayProject);
+    PubSub.subscribe("projectRemove", updateMenu.bind(null, toDoList.getProjects()));
     PubSub.subscribe("prjEdit", updateMenu.bind(null, toDoList.getProjects()));
     return {initHomePage};
 })();
