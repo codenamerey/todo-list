@@ -25,16 +25,16 @@ export default function projectFactory(name, due) {
         tasks.push(task);
     }
 
-    const addTask = function(name) {
+    const addTask = function(project, name) {
         let task = taskFactory(name, 'I HAVE NO IDEA', '2022-12-25', 0);
         tasks.push(task);
-        PubSub.publish('taskAdded', tasks);
+        PubSub.publish('taskAdded', [project, tasks]);
     }
 
-    const removeTask = function(task) {
+    const removeTask = function(project, task) {
         const index = tasks.indexOf(task);
         tasks.splice(index, 1);
-        PubSub.publish("taskRemove", tasks);
+        PubSub.publish("taskRemove", [project, tasks]);
     }
 
     const editPrjName = function(name) {

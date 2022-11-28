@@ -31,7 +31,7 @@ const UI = (function() {
     const renderMenu = function() {
         let projects = [...arguments][0];
         const h2 = renderElement('h2', `Today is ${getToday()}`);
-        const aside = renderElement('aside', null);
+        const aside = renderElement('aside', null, 'projects-n-tasks');
 
         const ul = renderElement('ul', 'My projects', 'projects');
         const btn = renderElement('button', 'Add Project +', 'add-project-button');
@@ -118,8 +118,9 @@ const UI = (function() {
         buttonDiv.appendChild(button);
     }
 
-    const displayTasks = function(tasks) {
-        updateMain(tasks);
+    const displayTasks = function() {
+        //args [0] is project, args[1] is tasks
+        updateMain(arguments[0][0], arguments[0][1]);
     }
 
     const displayProject = function(project) {

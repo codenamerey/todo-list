@@ -43,13 +43,12 @@ export default (function eventListeners() {
 
 
     const removeProject = function(project) {
-        console.log(project);
         toDoList.removeProject(project);
     }
 
     const removeTask = function(task) {
         //task[0] is project, task[1] is task
-        task[0].removeTask(task[1]);
+        task[0].removeTask(task[0], task[1]);
     }
     
     const broadcastAddPrj = function() {
@@ -70,7 +69,7 @@ export default (function eventListeners() {
     const addTaskBtnClick = function() {
         let taskName = prompt("Task Name:");
         const currentProject = toDoList.getCurrentProject();
-        currentProject.addTask(taskName);
+        currentProject.addTask(currentProject, taskName);
     }
 
     return {addEventListeners}
