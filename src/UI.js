@@ -99,16 +99,18 @@ const UI = (function() {
         }
     }
 
-    const updateMain = function(tasks) {
+    const updateMain = function(project, tasks) {
         const taskDiv = document.querySelector('main > #task-div');
         const buttonDiv = document.querySelector('main > #button-div');  
         taskDiv.innerHTML = '';
-        tasks.forEach((task) => {
-            const p = renderElement('p', task.getName(), 'task-item');
-            const del = renderElement('span', 'X', 'delete-button');
-            p.appendChild(del);
-            taskDiv.appendChild(p);
-        });
+        if(tasks) {
+            tasks.forEach((task) => {
+                const p = renderElement('p', task.getName(), 'task-item');
+                const del = renderElement('span', 'X', null, 'task-delete-button');
+                eventListeners.addEventListeners(del, [project, task]);
+                taskDiv.append(p, del);
+            });
+        }
         //if there is add-task-button already, forget it!
         if((buttonDiv.childNodes).length) return;
         const button = renderElement('button', 'Add Task +', 'add-task-button');
@@ -121,7 +123,7 @@ const UI = (function() {
     }
 
     const displayProject = function(project) {
-        updateMain(project.getTasks());
+        updateMain(project, project.getTasks());
     }
     // const renderMenu = function() {
     //     const aside = document.createElement('aside');
@@ -129,6 +131,7 @@ const UI = (function() {
     // }
     PubSub.subscribe("newProject", updateMenu);
     PubSub.subscribe("taskAdded", displayTasks);
+    PubSub.subscribe("taskRemove", displayTasks);
     PubSub.subscribe("prjClick", displayProject);
     PubSub.subscribe("projectRemove", updateMenu.bind(null, toDoList.getProjects()));
     PubSub.subscribe("prjEdit", updateMenu.bind(null, toDoList.getProjects()));

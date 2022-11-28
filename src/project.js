@@ -31,9 +31,15 @@ export default function projectFactory(name, due) {
         PubSub.publish('taskAdded', tasks);
     }
 
+    const removeTask = function(task) {
+        const index = tasks.indexOf(task);
+        tasks.splice(index, 1);
+        PubSub.publish("taskRemove", tasks);
+    }
+
     const editPrjName = function(name) {
         projectName = name;
     }
 
-    return {projectName, dueDate, tasks, getDueDate, getProjectName, getTasks, addTask, editPrjName, addInitialTask};
+    return {projectName, dueDate, tasks, getDueDate, getProjectName, getTasks, addTask, editPrjName, addInitialTask, removeTask};
 }

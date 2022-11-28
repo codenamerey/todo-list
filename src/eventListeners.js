@@ -23,6 +23,10 @@ export default (function eventListeners() {
             button.addEventListener('click', removeProject.bind(null, object));
         }
 
+        if(button.classList.contains('task-delete-button')) {
+            button.addEventListener('click', removeTask.bind(null, object));
+        }
+
         // switch(button.id) {
         //     case 'add-project-button':
         //         button.addEventListener('click', broadcastAddPrj);
@@ -41,6 +45,11 @@ export default (function eventListeners() {
     const removeProject = function(project) {
         console.log(project);
         toDoList.removeProject(project);
+    }
+
+    const removeTask = function(task) {
+        //task[0] is project, task[1] is task
+        task[0].removeTask(task[1]);
     }
     
     const broadcastAddPrj = function() {

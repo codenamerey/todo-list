@@ -71,6 +71,7 @@ const toDoList = (function() {
     PubSub.subscribe("taskAdded", updateLocalStorage);
     PubSub.subscribe("prjEdit", updateLocalStorageOnPrjEdit);
     PubSub.subscribe("projectRemove", updateLocalStorage);
+    PubSub.subscribe("taskRemove", updateLocalStorage);
     if(savedProjects) recallProjects();
     return {getCurrentProject, getProjects, removeProject}
 })();
