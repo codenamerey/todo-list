@@ -32,8 +32,8 @@ const UI = (function() {
         let projects = [...arguments][0];
         const h2 = renderElement('h2', `Today is ${getToday()}`);
         const aside = renderElement('aside', null, 'projects-n-tasks');
-
-        const ul = renderElement('ul', 'My projects', 'projects');
+        const h3 = renderElement('h3', 'My Projects');
+        const ul = renderElement('ul', null , 'projects');
         const btn = renderElement('button', 'Add Project +', 'add-project-button');
         eventListeners.addEventListeners(btn);
         //check for projects
@@ -43,20 +43,22 @@ const UI = (function() {
         }
         else {
             projects.forEach((item, index) => {
-                let li = renderElement('li', item.getProjectName(), `project-${index}`, 'project-item');
+                let li = renderElement('li');
+                let project = renderElement('p', item.getProjectName(), `project-${index}`, 'project-item');
                 const del = renderElement('span', 'X', null,'delete-button');
                 //listen for clicks
-                eventListeners.addEventListeners(li, item);
+                eventListeners.addEventListeners(project, item);
                 //delete project on click
                 eventListeners.addEventListeners(del, item);
-                ul.append(li, del);
+                li.append(project, del);
+                ul.append(li);
             })
             // projects.forEach((item) => {
             //     let li = renderElement('li', item, null, 'menu-item');
             //     ul.appendChild(li);
             // });
         }
-        aside.append(h2, ul, btn);
+        aside.append(h2, h3, ul, btn);
         return aside;
     }
 
@@ -82,19 +84,19 @@ const UI = (function() {
         projectsDiv.innerHTML = '';
         let index = 0;
         for (const value in projects) {
-            const li = renderElement('li', projects[value].getProjectName(), `project-${index}`, 'project-item');
+            const li = renderElement('li');
+            const project = renderElement('p', projects[value].getProjectName(), `project-${index}`, 'project-item');
             const del = renderElement('span', 'X', null, 'delete-button');
-            li.setAttribute('data-index', index);
-            console.log(projects);
-            console.log(projects[value].getProjectName())
+            project.setAttribute('data-index', index);
             //If project is clicked, broadcast it.
-            eventListeners.addEventListeners(li, projects[value]);
+            eventListeners.addEventListeners(project, projects[value]);
             //If delete button is clicked, delete a project
             eventListeners.addEventListeners(del, projects[value]);
             // li.addEventListener('click', function() {
             //     PubSub.publish('prjClick', that);
             // });
-            projectsDiv.append(li, del);
+            li.append(project, del)
+            projectsDiv.append(li);
             index++;
         }
     }
@@ -105,10 +107,12 @@ const UI = (function() {
         taskDiv.innerHTML = '';
         if(tasks) {
             tasks.forEach((task) => {
+                const taskObject = renderElement('div', null, 'task-object'); 
                 const p = renderElement('p', task.getName(), 'task-item');
                 const del = renderElement('span', 'X', null, 'task-delete-button');
                 eventListeners.addEventListeners(del, [project, task]);
-                taskDiv.append(p, del);
+                taskObject.append(p, del);
+                taskDiv.append(taskObject);
             });
         }
         //if there is add-task-button already, forget it!
